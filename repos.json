@@ -22,6 +22,8 @@
     { "name": "go-vault-secret-sync", "language": "go" },
     { "name": "go-secretsync", "language": "go" },
     { "name": "terraform-github-markdown", "language": "terraform" },
-    { "name": "terraform-repository-automation", "language": "terraform" }
+    { "name": "terraform-repository-automation", "language": "terraform" },
+    { "name": "rust-cosmic-cults", "language": "rust" },
+    { "name": "rust-vintage-game-generator", "language": "rust" }
   ]
 }
