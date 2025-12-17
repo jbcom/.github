@@ -1,10 +1,9 @@
-# Repository settings synced via https://probot.github.io/apps/settings/
+# Repository settings via https://probot.github.io/apps/settings/
 # Installed on jbcom organization
 #
-# This file is synced to all repos via jbcom-control-center.
-# Individual repos inherit these defaults and can override specific settings.
-#
-# DO NOT EDIT in target repos - changes will be overwritten by control-center sync.
+# This file is created ONCE from control-center defaults.
+# EDIT THIS FILE to customize settings for your repository.
+# Your changes will NOT be overwritten by future syncs.
 
 # =============================================================================
 # Repository Settings
