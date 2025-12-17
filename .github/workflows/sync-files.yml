@@ -78,6 +78,17 @@ jobs:
         repo: ${{ fromJson(needs.matrix.outputs.repos) }}
     
     steps:
+      - name: Validate required secrets
+        run: |
+          if [[ -z "${{ secrets.CI_GITHUB_TOKEN }}" ]]; then
+            echo "::error::CI_GITHUB_TOKEN secret is required for cross-repository operations"
+            exit 1
+          fi
+          if [[ -z "${{ secrets.REPO_SYNC_SSH_KEY }}" ]]; then
+            echo "::error::REPO_SYNC_SSH_KEY secret is required for SSH authentication"
+            exit 1
+          fi
+
       - name: Checkout .github repo
         uses: actions/checkout@v4
         with:
@@ -175,7 +186,11 @@ jobs:
           if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
             git fetch origin "$BRANCH"
             git checkout "$BRANCH"
-            git merge main --no-edit || git checkout --theirs . && git add -A
+            if ! git merge main --no-edit; then
+              echo "Merge conflict - taking incoming changes"
+              git checkout --theirs . || { echo "::error::Failed to resolve merge conflict"; exit 1; }
+              git add -A
+            fi
           else
             git checkout -b "$BRANCH"
           fi
@@ -186,7 +201,7 @@ jobs:
           Automated sync of shared configurations.
           Source: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           
-          git push -u origin "$BRANCH" --force
+          git push -u origin "$BRANCH" --force-with-lease
           
           # Create or update PR
           EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' 2>/dev/null || echo "")
