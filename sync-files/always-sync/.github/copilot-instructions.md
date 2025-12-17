@@ -1,69 +1,96 @@
-# Copilot Instructions
+# jbcom Organization - AI Agent Instructions
 
-> **Repository-specific instructions should be in `.github/copilot-instructions-local.md`**
-> This file provides common patterns. Local instructions take precedence.
+> **This file contains ORGANIZATION-WIDE standards.**
+> **Repository-specific instructions should be added below the `## Repository-Specific` section.**
 
-## Before Starting Any Task
+## Organization Context
 
-1. **Read the issue/PR description completely**
-2. **Check for existing patterns** in the codebase before creating new ones
-3. **Run the test suite** before and after changes
-4. **Follow the repository's established conventions**
+This repository is part of the **jbcom** ecosystem. All repositories share:
 
-## Code Quality Requirements
+- **GitHub Organization**: [jbcom](https://github.com/jbcom)
+- **Control Center**: [jbcom/control-center](https://github.com/jbcom/control-center) - Central configuration and sync
+- **Portfolio**: [jbcom.github.io](https://jbcom.github.io) - Showcase and documentation
 
-### All Changes Must:
-- [ ] Pass linting (`npm run lint` / `uv run ruff check`)
-- [ ] Pass tests (`npm test` / `uv run pytest`)
-- [ ] Include tests for new functionality
-- [ ] Follow existing code style and patterns
-- [ ] Have clear, descriptive commit messages
+## Project Management
 
-### Commit Message Format
+### Linked Projects (Use These!)
+
+All issues and PRs should be linked to the appropriate organization project:
+
+| Project | Purpose | When to Use |
+|---------|---------|-------------|
+| **Roadmap** | Feature planning and milestones | New features, enhancements |
+| **Backlog** | Prioritized work items | Bug fixes, tech debt |
+| **Sprint** | Current iteration work | Active development |
+
+### Issue Workflow
+
+1. Create issue with appropriate labels
+2. Link to organization project (Roadmap/Backlog)
+3. Assign to milestone if applicable
+4. Reference in PR when complete
+
+## Repository Settings
+
+### GitHub Settings App
+
+This organization uses the [Settings GitHub App](https://github.com/apps/settings) for repository configuration:
+
+- **Organization settings**: `jbcom/control-center/.github/settings.yml`
+- **Repository settings**: `.github/settings.yml` in each repo
+
+**Repository settings EXTEND organization settings.** Use your local `.github/settings.yml` for:
+- Repository-specific labels
+- Branch protection overrides
+- Team permissions
+
+### Rulesets
+
+Organization-wide rulesets enforce:
+- `copilot_code_review` - AI-assisted code review on PRs
+- Branch protection on `main`
+
+## Code Quality Standards
+
+### Before Any Change
+
+1. Check existing patterns in the codebase
+2. Follow repository's established conventions
+3. Run tests before AND after changes
+
+### Commit Messages
+
 ```
 <type>(<scope>): <description>
 
 Types: feat, fix, docs, style, refactor, test, chore
 ```
 
-## Common Patterns
+### What NOT To Do
 
-### Error Handling
-- Always handle errors explicitly
-- Log errors with context
-- Throw typed errors when possible
-
-### Testing
-- Write tests FIRST when fixing bugs (TDD)
-- Test edge cases, not just happy paths
-- Mock external dependencies
-
-### Documentation
-- Update README if adding features
-- Add JSDoc/docstrings to public APIs
-- Include usage examples
-
-## Issue Resolution Workflow
-
-1. **Understand**: Read issue, check related code
-2. **Reproduce**: If bug, write failing test first
-3. **Implement**: Make minimal changes to fix/add feature
-4. **Test**: Ensure all tests pass
-5. **Document**: Update docs if needed
-6. **Commit**: Clear message referencing issue
-
-## What NOT To Do
-
-- ❌ Don't refactor unrelated code
-- ❌ Don't add dependencies without justification
-- ❌ Don't skip tests
-- ❌ Don't change formatting of untouched code
-- ❌ Don't make breaking changes without discussion
+- ❌ Refactor unrelated code
+- ❌ Add dependencies without justification
+- ❌ Skip tests
+- ❌ Make breaking changes without discussion
 
 ## Getting Help
 
-If blocked:
 1. Check `memory-bank/` for project context
 2. Check `docs/` for architecture decisions
 3. Look at recent PRs for patterns
 4. Ask in the issue for clarification
+
+---
+
+## Repository-Specific
+
+<!-- 
+Repository maintainers: Add your project-specific instructions below.
+This section will NOT be overwritten by organization sync.
+
+Example additions:
+- Project-specific commands
+- Architecture decisions
+- Local development setup
+- Team conventions
+-->
