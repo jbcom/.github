@@ -9,6 +9,11 @@
 #   - Creates a PR (not direct push) for each repo
 #   - Respects always-sync vs initial-only semantics
 #   - Language-specific files based on repo prefix
+#
+# Required Secrets:
+#   - SYNC_TOKEN: A Personal Access Token (classic) with 'repo' scope
+#                 This is required to clone, push, and create PRs in other repos.
+#                 The default GITHUB_TOKEN only has access to the current repo.
 
 name: Sync Files to Repos
 
@@ -33,7 +38,9 @@ permissions:
   contents: read
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # Use SYNC_TOKEN (PAT with repo scope) for cross-repo operations
+  # Falls back to GITHUB_TOKEN for read-only operations in the matrix job
+  GH_TOKEN: ${{ secrets.SYNC_TOKEN || secrets.GITHUB_TOKEN }}
 
 jobs:
   # Build list of repos to sync
@@ -80,8 +87,16 @@ jobs:
           path: source
       
       - name: Clone target repo
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
-          gh repo clone "jbcom/${{ matrix.repo.name }}" target
+          if [[ -z "$SYNC_TOKEN" ]]; then
+            echo "::error::SYNC_TOKEN secret is not set. This workflow requires a PAT with 'repo' scope to push to other repositories."
+            exit 1
+          fi
+          
+          # Clone using token-authenticated URL for push access
+          git clone "https://x-access-token:${SYNC_TOKEN}@github.com/jbcom/${{ matrix.repo.name }}.git" target
           cd target
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -152,6 +167,8 @@ jobs:
       - name: Create PR
         if: steps.changes.outputs.has_changes == 'true' && github.event.inputs.dry_run != 'true'
         working-directory: target
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           BRANCH="chore/sync-from-org-github"
           
