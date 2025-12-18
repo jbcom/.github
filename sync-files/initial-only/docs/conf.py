@@ -8,24 +8,44 @@ import sys
 sys.path.insert(0, os.path.abspath("../src"))
 
 # -- Project information -----------------------------------------------------
-# TODO: Update these for your project
+
 project = "PACKAGE_NAME"
 copyright = "2025, Jon Bogaty"
 author = "Jon Bogaty"
+release = "0.0.0"
 
-# Try to get version from pyproject.toml or package.json
+# Try to get project information from pyproject.toml or package.json
 try:
     import tomllib
     with open("../pyproject.toml", "rb") as f:
         data = tomllib.load(f)
-        release = data.get("project", {}).get("version", "0.0.0")
+        project_data = data.get("project", {})
+        project = project_data.get("name", project)
+        release = project_data.get("version", release)
+
+        authors = project_data.get("authors", [])
+        if authors:
+            author_names = [a.get("name") for a in authors if a.get("name")]
+            if author_names:
+                author = ", ".join(author_names)
 except Exception:
     try:
         import json
         with open("../package.json") as f:
-            release = json.load(f).get("version", "0.0.0")
+            data = json.load(f)
+            project = data.get("name", project)
+            release = data.get("version", release)
+
+            pkg_author = data.get("author")
+            if isinstance(pkg_author, str):
+                author = pkg_author
+            elif isinstance(pkg_author, dict):
+                author = pkg_author.get("name", author)
     except Exception:
-        release = "0.0.0"
+        pass
+
+from datetime import datetime
+copyright = f"{datetime.now().year}, {author}"
 
 # -- General configuration ---------------------------------------------------
 
