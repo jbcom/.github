@@ -10,20 +10,31 @@ sys.path.insert(0, os.path.abspath("../src"))
 # -- Project information -----------------------------------------------------
 # TODO: Update these for your project
 project = "PACKAGE_NAME"
+package_name = "PACKAGE_NAME"
 copyright = "2025, Jon Bogaty"
 author = "Jon Bogaty"
 
-# Try to get version from pyproject.toml or package.json
+# Try to get version and name from pyproject.toml or package.json
 try:
-    import tomllib
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib  # Fallback to tomli if installed
+
     with open("../pyproject.toml", "rb") as f:
         data = tomllib.load(f)
-        release = data.get("project", {}).get("version", "0.0.0")
+        project_table = data.get("project", {})
+        release = project_table.get("version", "0.0.0")
+        project = project_table.get("name", "PACKAGE_NAME")
+        package_name = project.replace("-", "_")
 except Exception:
     try:
         import json
         with open("../package.json") as f:
-            release = json.load(f).get("version", "0.0.0")
+            data = json.load(f)
+            release = data.get("version", "0.0.0")
+            project = data.get("name", "PACKAGE_NAME")
+            package_name = project.replace("-", "_")
     except Exception:
         release = "0.0.0"
 
@@ -103,3 +114,17 @@ myst_enable_extensions = [
     "tasklist",
 ]
 myst_heading_anchors = 3
+
+def setup(app):
+    """Generate modules.rst dynamically."""
+    if package_name != "PACKAGE_NAME":
+        modules_rst = os.path.join(os.path.dirname(__file__), "api", "modules.rst")
+        if os.path.exists(modules_rst):
+            with open(modules_rst, "r") as f:
+                content = f.read()
+
+            if "PACKAGE_NAME" in content:
+                print(f"Replacing PACKAGE_NAME with {package_name} in modules.rst")
+                content = content.replace("PACKAGE_NAME", package_name)
+                with open(modules_rst, "w") as f:
+                    f.write(content)

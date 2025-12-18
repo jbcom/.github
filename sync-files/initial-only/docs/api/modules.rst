@@ -1,7 +1,8 @@
 Modules
 =======
 
-.. TODO: Replace PACKAGE_NAME with your actual package name
+.. This file is automatically updated by conf.py during the build process.
+.. It will list the package modules dynamically based on pyproject.toml.
 
 .. autosummary::
    :toctree: _autosummary
