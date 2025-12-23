@@ -1,0 +1,9 @@
+# Organization .github repository settings
+# This is the base configuration for all jbcom repositories
+# Other repositories extend this using: _extends: .github
+
+# Note: This repository itself uses organization defaults
+# No _extends needed (this IS the source of truth)
+
+# Control repositories use organization defaults
+# No language-specific linters required
