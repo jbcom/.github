@@ -1,0 +1,17 @@
+{
+  "rust-ai-client": {
+    "extends": "rust",
+    "repo_name": "rust-ai-client",
+    "crate_name": "ai-client-rs"
+  },
+  "rust-bevy-ai": {
+    "extends": "rust",
+    "repo_name": "rust-bevy-ai",
+    "crate_name": "bevy-ai-toolkit"
+  },
+  "rust-bevy-combat": {
+    "extends": "rust",
+    "repo_name": "rust-bevy-combat",
+    "crate_name": "bevy-combat"
+  }
+}
